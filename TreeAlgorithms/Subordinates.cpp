@@ -1,0 +1,84 @@
+//
+//  main2.cpp
+//  main2
+//
+//  Created by Rajveer Singh on 21/01/22.
+//
+
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <chrono>
+#include <cstring>
+#include <ctime>
+#include <iomanip>
+#include <iostream>
+#include <list>
+#include <map>
+#include <numeric>
+#include <queue>
+#include <random>
+#include <set>
+#include <string>
+#include <time.h>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
+// MARK:- PRACTICE
+
+#define len(a) (int)a.size()
+
+constexpr bool test = false;
+constexpr long long mod1 = 1e9 + 7;
+constexpr long long mod2 = 998244353;
+constexpr long long inf = 9e18 + 5;
+constexpr int lim = 1e6 + 5;
+
+void testCase() {
+  int n;
+  std::cin >> n;
+
+  std::vector<std::vector<int>> adj(n + 1);
+  for (int i = 0; i <= n - 2; i++) {
+    int v;
+    std::cin >> v;
+
+    adj[i + 2].push_back(v);
+    adj[v].push_back(i + 2);
+  }
+
+  std::vector<int> vis(n + 1), size(n + 1, 1);
+  auto dfs = [&](int u, auto &&dfs) -> void {
+    vis[u] = true;
+    for (auto &v : adj[u]) {
+      if (!vis[v]) {
+        dfs(v, dfs);
+        size[u] += size[v];
+      }
+    }
+  };
+  dfs(1, dfs);
+
+  for (int v = 1; v <= n; v++) {
+    std::cout << size[v] - 1 << ' ';
+  }
+  std::cout << '\n';
+}
+
+int main() {
+  std::ios_base::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  std::cout.precision(15);
+
+  int t = 1;
+
+  if (test) {
+    std::cin >> t;
+  }
+
+  for (int i = 0; i <= t - 1; i++) {
+    //    std::cout << "Case #" << i + 1 << ": ";
+    testCase();
+  }
+}
