@@ -37,34 +37,35 @@ ll inf=1e10+5;
  
 void testCase() {
     
-    ll n;
+    ll n, k;
     
-    std::cin>>n;
+    std::cin>>n>>k;
     
     std::vector<ll> a(n);
-    
-    std::map<ll, ll> cnt;
-    ll s=0;
     
     for(int i=0;i<=n-1;i++) {
         
         std::cin>>a[i];
-        
-        s+=a[i];
-        cnt[(s%n+n)%n]++;
     }
     
-    ll ans=0;
+    ll ans=0, step=0, max=0;
+    std::map<ll, ll> cnt;
     
-    for(int i=0;i<=n-1;i++) {
+    for(ll i=0;i<=n-1;i++) {
         
-        if(cnt[i]) {
+        for(ll j=step;j<=n-1 && max+(!cnt[a[j]])<=k;j++, step++) {
             
-            ans+=(cnt[i]*(cnt[i]-1))/2;
+            max+=(!cnt[a[j]]);
+            cnt[a[j]]++;
         }
+        
+        cnt[a[i]]--;
+        
+        ans+=(step-i);
+        max-=(!cnt[a[i]]);
     }
     
-    std::cout<<ans+cnt[0]<<"\n";
+    std::cout<<ans<<"\n";
 }
  
 int main() {

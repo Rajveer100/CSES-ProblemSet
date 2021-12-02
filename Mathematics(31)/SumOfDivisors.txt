@@ -1,6 +1,6 @@
 //
 //  main.cpp
-//  CPWorkSpace
+//  main2
 //
 //  Created by Rajveer Singh on 23/09/21.
 //
@@ -41,30 +41,19 @@ void testCase() {
     
     std::cin>>n;
     
-    std::vector<ll> a(n);
-    
-    std::map<ll, ll> cnt;
     ll s=0;
     
-    for(int i=0;i<=n-1;i++) {
+    for(ll i=1;i<=n;i=n/(n/i)+1) {
         
-        std::cin>>a[i];
+        ll k=n/(n/i);
         
-        s+=a[i];
-        cnt[(s%n+n)%n]++;
+        ll l=(((i%mod1)*((i-1)%mod1))%mod1*500000004)%mod1;
+        ll r=(((k%mod1)*((k+1)%mod1))%mod1*500000004)%mod1;
+        
+        s=(s+(n/i)%mod1*((r-l+mod1)%mod1))%mod1;
     }
     
-    ll ans=0;
-    
-    for(int i=0;i<=n-1;i++) {
-        
-        if(cnt[i]) {
-            
-            ans+=(cnt[i]*(cnt[i]-1))/2;
-        }
-    }
-    
-    std::cout<<ans+cnt[0]<<"\n";
+    std::cout<<s<<"\n";
 }
  
 int main() {
@@ -82,7 +71,7 @@ int main() {
     
     for(ll i=0;i<=t-1;i++) {
         
-//        std::cout<<"Case #"<<i+1<<": ";
+        //        std::cout<<"Case #"<<i+1<<": ";
         testCase();
     }
 }

@@ -37,34 +37,37 @@ ll inf=1e10+5;
  
 void testCase() {
     
-    ll n;
+    std::string a, b;
     
-    std::cin>>n;
+    std::cin>>a;
+    std::cin>>b;
     
-    std::vector<ll> a(n);
+    std::vector<std::vector<ll>> dp(len(a)+1, std::vector<ll> (len(b)+1, inf));
     
-    std::map<ll, ll> cnt;
-    ll s=0;
+    dp[0][0]=0;
     
-    for(int i=0;i<=n-1;i++) {
+    for(int i=0;i<=len(a);i++) {
         
-        std::cin>>a[i];
-        
-        s+=a[i];
-        cnt[(s%n+n)%n]++;
-    }
-    
-    ll ans=0;
-    
-    for(int i=0;i<=n-1;i++) {
-        
-        if(cnt[i]) {
+        for(int j=0;j<=len(b);j++) {
             
-            ans+=(cnt[i]*(cnt[i]-1))/2;
+            if(i) {
+                
+                dp[i][j]=std::min(dp[i][j], dp[i-1][j]+1);
+            }
+            
+            if(j) {
+                
+                dp[i][j]=std::min(dp[i][j], dp[i][j-1]+1);
+            }
+            
+            if(i && j) {
+                
+                dp[i][j]=std::min(dp[i][j], dp[i-1][j-1]+(a[i-1]!=b[j-1]));
+            }
         }
     }
     
-    std::cout<<ans+cnt[0]<<"\n";
+    std::cout<<dp[len(a)][len(b)]<<"\n";
 }
  
 int main() {
@@ -82,7 +85,7 @@ int main() {
     
     for(ll i=0;i<=t-1;i++) {
         
-//        std::cout<<"Case #"<<i+1<<": ";
+        //        std::cout<<"Case #"<<i+1<<": ";
         testCase();
     }
 }

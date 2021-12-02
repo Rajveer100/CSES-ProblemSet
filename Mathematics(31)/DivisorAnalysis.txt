@@ -1,6 +1,6 @@
 //
 //  main.cpp
-//  CPWorkSpace
+//  main2
 //
 //  Created by Rajveer Singh on 23/09/21.
 //
@@ -35,36 +35,53 @@ ll mod1=1e9+7;
 ll mod2=998244353;
 ll inf=1e10+5;
  
+ll binExp(ll a, ll b, ll m) {
+    
+    ll res=1, mul=a;
+    
+    while(b) {
+        
+        if(b&1) {
+            
+            res=(res*mul)%m;
+        }
+        
+        mul=(mul*mul)%m;
+        b>>=1;
+    }
+    
+    return res;
+}
+ 
+ll modInv(ll n, ll m) {
+    
+    return binExp(n, m-2, m);
+}
+ 
 void testCase() {
     
     ll n;
     
     std::cin>>n;
     
-    std::vector<ll> a(n);
-    
-    std::map<ll, ll> cnt;
-    ll s=0;
+    ll d=1, s=1;
+    ll prod=1, prodDiv=1;
     
     for(int i=0;i<=n-1;i++) {
         
-        std::cin>>a[i];
+        ll p, k;
         
-        s+=a[i];
-        cnt[(s%n+n)%n]++;
+        std::cin>>p>>k;
+        
+        d=(d*(k+1))%mod1;
+        s=(s*(binExp(p, k+1, mod1)-1)%mod1)*modInv(p-1, mod1)%mod1;
+        
+        ll f=binExp(p, (k*(k+1))/2, mod1);
+        prod=binExp(prod, k+1, mod1)*binExp(f, prodDiv, mod1)%mod1;
+        prodDiv=(prodDiv*(k+1))%(mod1-1);
     }
     
-    ll ans=0;
-    
-    for(int i=0;i<=n-1;i++) {
-        
-        if(cnt[i]) {
-            
-            ans+=(cnt[i]*(cnt[i]-1))/2;
-        }
-    }
-    
-    std::cout<<ans+cnt[0]<<"\n";
+    std::cout<<d<<" "<<s<<" "<<prod<<"\n";
 }
  
 int main() {
@@ -82,7 +99,7 @@ int main() {
     
     for(ll i=0;i<=t-1;i++) {
         
-//        std::cout<<"Case #"<<i+1<<": ";
+        //        std::cout<<"Case #"<<i+1<<": ";
         testCase();
     }
 }

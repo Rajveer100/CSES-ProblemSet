@@ -33,7 +33,7 @@ typedef long double ld;
 bool test=false;
 ll mod1=1e9+7;
 ll mod2=998244353;
-ll inf=1e10+5;
+ll inf=1e15+5;
  
 void testCase() {
     
@@ -43,28 +43,29 @@ void testCase() {
     
     std::vector<ll> a(n);
     
-    std::map<ll, ll> cnt;
-    ll s=0;
-    
     for(int i=0;i<=n-1;i++) {
         
         std::cin>>a[i];
-        
-        s+=a[i];
-        cnt[(s%n+n)%n]++;
     }
     
-    ll ans=0;
+    ll s=std::accumulate(a.begin(), a.end(), 0ll);
+    std::vector<std::vector<ll>> dp(n+1, std::vector<ll> (n+1, -inf));
     
-    for(int i=0;i<=n-1;i++) {
+    for(ll i=0;i<=n-1;i++) {
         
-        if(cnt[i]) {
+        for(ll j=i;j>=0;j--) {
             
-            ans+=(cnt[i]*(cnt[i]-1))/2;
+            if(i==j) {
+                
+                dp[i][j]=a[i];
+                continue;
+            }
+            
+            dp[i][j]=std::max(a[i]-dp[i-1][j], a[j]-dp[i][j+1]);
         }
     }
     
-    std::cout<<ans+cnt[0]<<"\n";
+    std::cout<<(s+dp[n-1][0])/2<<"\n";
 }
  
 int main() {
@@ -82,7 +83,7 @@ int main() {
     
     for(ll i=0;i<=t-1;i++) {
         
-//        std::cout<<"Case #"<<i+1<<": ";
+        //        std::cout<<"Case #"<<i+1<<": ";
         testCase();
     }
 }

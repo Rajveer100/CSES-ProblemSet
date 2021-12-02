@@ -1,6 +1,6 @@
 //
 //  main.cpp
-//  CPWorkSpace
+//  main2
 //
 //  Created by Rajveer Singh on 23/09/21.
 //
@@ -37,34 +37,56 @@ ll inf=1e10+5;
  
 void testCase() {
     
-    ll n;
+    ll n, m;
     
-    std::cin>>n;
+    std::cin>>n>>m;
     
     std::vector<ll> a(n);
-    
-    std::map<ll, ll> cnt;
-    ll s=0;
     
     for(int i=0;i<=n-1;i++) {
         
         std::cin>>a[i];
+    }
+    
+    std::vector<std::vector<ll>> dp(n, std::vector<ll> (m+5, 0));
+    
+    if(a.front()) {
         
-        s+=a[i];
-        cnt[(s%n+n)%n]++;
+        dp[0][a.front()]=1;
+    } else {
+        
+        for(int i=1;i<=m;i++) {
+            
+            dp[0][i]=1;
+        }
+    }
+    
+    for(int i=1;i<=n-1;i++) {
+        
+        if(a[i]) {
+            
+            (dp[i][a[i]]+=(dp[i-1][a[i]]))%=mod1;
+            (dp[i][a[i]]+=(dp[i-1][a[i]-1]))%=mod1;
+            (dp[i][a[i]]+=(dp[i-1][a[i]+1]))%=mod1;
+            continue;
+        }
+        
+        for(int j=1;j<=m;j++) {
+            
+            (dp[i][j]+=(dp[i-1][j]))%=mod1;
+            (dp[i][j]+=(dp[i-1][j-1]))%=mod1;
+            (dp[i][j]+=(dp[i-1][j+1]))%=mod1;
+        }
     }
     
     ll ans=0;
     
-    for(int i=0;i<=n-1;i++) {
+    for(int i=1;i<=m;i++) {
         
-        if(cnt[i]) {
-            
-            ans+=(cnt[i]*(cnt[i]-1))/2;
-        }
+        (ans+=dp[n-1][i])%=mod1;
     }
     
-    std::cout<<ans+cnt[0]<<"\n";
+    std::cout<<ans<<"\n";
 }
  
 int main() {
@@ -82,7 +104,7 @@ int main() {
     
     for(ll i=0;i<=t-1;i++) {
         
-//        std::cout<<"Case #"<<i+1<<": ";
+        //        std::cout<<"Case #"<<i+1<<": ";
         testCase();
     }
 }

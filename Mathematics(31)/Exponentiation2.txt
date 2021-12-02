@@ -1,6 +1,6 @@
 //
 //  main.cpp
-//  CPWorkSpace
+//  main2
 //
 //  Created by Rajveer Singh on 23/09/21.
 //
@@ -35,36 +35,37 @@ ll mod1=1e9+7;
 ll mod2=998244353;
 ll inf=1e10+5;
  
+ll binExp(ll a, ll b, ll m) {
+    
+    ll res=1, mul=a;
+    
+    while(b) {
+        
+        if(b&1) {
+            
+            res=(res*mul)%m;
+        }
+        
+        mul=(mul*mul)%m;
+        b>>=1;
+    }
+    
+    return res;
+}
+ 
 void testCase() {
     
-    ll n;
+    ll q;
     
-    std::cin>>n;
+    std::cin>>q;
     
-    std::vector<ll> a(n);
-    
-    std::map<ll, ll> cnt;
-    ll s=0;
-    
-    for(int i=0;i<=n-1;i++) {
+    for(int i=0;i<=q-1;i++) {
         
-        std::cin>>a[i];
+        ll a, b, c;
+        std::cin>>a>>b>>c;
         
-        s+=a[i];
-        cnt[(s%n+n)%n]++;
+        std::cout<<binExp(a, binExp(b, c, mod1-1), mod1)<<"\n";
     }
-    
-    ll ans=0;
-    
-    for(int i=0;i<=n-1;i++) {
-        
-        if(cnt[i]) {
-            
-            ans+=(cnt[i]*(cnt[i]-1))/2;
-        }
-    }
-    
-    std::cout<<ans+cnt[0]<<"\n";
 }
  
 int main() {
@@ -82,7 +83,7 @@ int main() {
     
     for(ll i=0;i<=t-1;i++) {
         
-//        std::cout<<"Case #"<<i+1<<": ";
+        //        std::cout<<"Case #"<<i+1<<": ";
         testCase();
     }
 }
