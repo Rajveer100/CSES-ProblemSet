@@ -35,36 +35,61 @@ ll mod1=1e9+7;
 ll mod2=998244353;
 ll inf=1e15+5;
  
-void testCase() {
+ll calc(ll n) {
     
-    ll n, m;
-    
-    std::cin>>n>>m;
-    
-    std::vector<ll> dpTotal(1ll<<n, 0);
-    
-    dpTotal[0]=1;
-    
-    for(int i=0;i<=m-1;i++) {
+    if(n<0) {
         
-        for(int j=0;j<=n-1;j++) {
+        return 0;
+    }
+    
+    if(!n) {
+        
+        return 1;
+    }
+    
+    std::string s=std::to_string(n);
+    
+    std::vector<ll> dp(20);
+    
+    ll val=1;
+    
+    for(int i=0;i<=19;i++) {
+        
+        dp[i]=val;
+        val*=9;
+    }
+    
+    ll cnt=0;
+    
+    for(int i=0;i<=len(s)-1;i++) {
+        
+        cnt+=dp[i];
+    }
+    
+    for(int i=0;i<=len(s)-1;i++) {
+        
+        if(s[i]-'0') {
             
-            std::vector<ll> dp(1ll<<n, 0);
+            ll cur=len(s)-i-1;
+            cnt+=(dp[cur]*(s[i]-'0'-(!i || s[i-1]<s[i])));
+        }
+        
+        if(i && s[i]==s[i-1]) {
             
-            for(int k=0;k<=(1ll<<n)-1;k++) {
-                
-                (dp[k]+=dpTotal[k^(1ll<<j)])%=mod1;
-                
-                if(j && !(k&(1ll<<j)) && !(k&(1ll<<(j-1)))) {
-                    
-                    (dp[k]+=dpTotal[k^(1ll<<(j-1))])%=mod1;
-                }
-            }
-            dpTotal=dp;
+            return cnt;
         }
     }
     
-    std::cout<<dpTotal[0]<<"\n";
+    return cnt+1;
+}
+ 
+void testCase() {
+    
+    ll a, b;
+    
+    std::cin>>a>>b;
+    
+    std::cout<<calc(b)-calc(a-1)<<"\n";
 }
  
 int main() {
