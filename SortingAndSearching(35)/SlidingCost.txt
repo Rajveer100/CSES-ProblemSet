@@ -535,14 +535,37 @@ void testCase() {
     
     RBTree t;
     
+    ll diff=0, prevMed=-1;
+    
     for(int i=0;i<=n-1;i++) {
         
         t.insert(a[i]);
         
         if(t.size()==k) {
             
-            std::cout<<t.osSelect(t.getRoot(), (k+1)/2)<<" ";
+            ll med=t.osSelect(t.getRoot(), (k+1)/2);
+            
+            if(i==k-1) {
+                
+                for(int j=0;j<=k-1;j++) {
+                    
+                    diff+=std::abs(med-a[j]);
+                }
+            } else {
+                
+                diff-=std::abs(prevMed-a[i-k]);
+                diff+=std::abs(med-a[i]);
+                
+                if(k%2==0) {
+                    
+                    diff-=(med-prevMed);
+                }
+            }
+            
+            std::cout<<diff<<" ";
+            
             t.erase(a[i-k+1]);
+            prevMed=med;
         }
     }
     
