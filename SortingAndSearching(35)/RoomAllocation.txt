@@ -41,58 +41,49 @@ void testCase() {
     
     std::cin>>n;
     
-    std::vector<std::pair<std::pair<ll, ll>, ll>> a(n);
+    std::vector<std::pair<ll, std::pair<ll, ll>>> a(n);
     
     for(int i=0;i<=n-1;i++) {
         
-        std::cin>>a[i].first.first>>a[i].first.second;
-        a[i].second=i;
+        std::cin>>a[i].second.first>>a[i].second.second;
+        a[i].first=i;
     }
     
-    std::sort(a.begin(), a.end(), [] (auto &l, auto&r) {
+    std::sort(a.begin(), a.end(), [] (auto &l, auto &r) {
         
-        if(l.first.first==r.first.first) {
-            
-            return l.first.second>r.first.second;
-        }
-        
-        return l.first.first<r.first.first;
+        return l.second.first<r.second.first;
     });
     
-    std::vector<ll> contains(n, 0), contained(n, 0);
+    std::vector<ll> assigned(n);
+    assigned[a[0].first]=1;
     
-    ll endMin=a[n-1].first.second;
-    
-    for(ll i=n-2;i>=0;i--) {
-        
-        if(a[i].first.second>=endMin) {
-        
-            contains[a[i].second]++;
-        }
-        endMin=std::min(endMin, a[i].first.second);
-    }
-    
-    ll endMax=a[0].first.second;
+    std::set<std::pair<ll, ll>> rooms;
+    rooms.insert({a[0].second.second, 1});
+ 
+    ll req=1;
     
     for(int i=1;i<=n-1;i++) {
         
-        if(a[i].first.second<=endMax) {
+        auto f=rooms.begin();
+        
+        if(a[i].second.first>f->first) {
             
-            contained[a[i].second]++;
+            rooms.erase(rooms.begin());
+            rooms.insert({a[i].second.second, f->second});
+            
+            assigned[a[i].first]=f->second;
+        } else {
+            
+            rooms.insert({a[i].second.second, ++req});
+            assigned[a[i].first]=req;
         }
-        endMax=std::max(endMax, a[i].first.second);
     }
     
-    for(int i=0;i<=n-1;i++) {
-        
-        std::cout<<contains[i]<<" ";
-    }
+    std::cout<<req<<"\n";
     
-    std::cout<<"\n";
-    
-    for(int i=0;i<=n-1;i++) {
+    for(auto x: assigned) {
         
-        std::cout<<contained[i]<<" ";
+        std::cout<<x<<" ";
     }
     
     std::cout<<"\n";
